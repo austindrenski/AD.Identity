@@ -2,15 +2,18 @@
 using System.IO;
 using System.IO.Compression;
 using AD.Identity.Conventions;
-using AD.Identity.OutputFormatters;
+using AD.Identity.Extensions;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.ResponseCompression;
+using Microsoft.DotNet.PlatformAbstractions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace IdentityApi
 {
@@ -67,8 +70,14 @@ namespace IdentityApi
                 throw new ArgumentNullException(nameof(services));
             }
 
-            services.AddDateTimeEventLogger(x => x.Context = () => new TradeContext(Configuration[$"ConnectionStrings:{EnvironmentName}:trade_db"]))
-                    .AddScoped<ITradeContext, TradeContext>(_ => new TradeContext(Configuration[$"ConnectionStrings:{EnvironmentName}:trade_db"]))
+            //.AddScoped<IIdentityContext, IdentityContext>(_ => new IdentityContext(Configuration[$"ConnectionStrings:{EnvironmentName}:identity_db"]))
+
+            services.AddApiVersioning(
+                        x =>
+                        {
+                            x.AssumeDefaultVersionWhenUnspecified = true;
+                            x.DefaultApiVersion = new ApiVersion(1, 0);
+                        })
                     .AddMemoryCache()
                     .AddResponseCompression(x => x.Providers.Add<GzipCompressionProvider>())
                     .Configure<GzipCompressionProviderOptions>(x => x.Level = CompressionLevel.Fastest)
@@ -97,12 +106,12 @@ namespace IdentityApi
                     .AddSwaggerGen(
                         x =>
                         {
-//                            x.DescribeAllEnumsAsStrings();
-//                            x.IncludeXmlComments($"{Path.Combine(ApplicationEnvironment.ApplicationBasePath, nameof(DataApi))}.xml");
-//                            x.IgnoreObsoleteActions();
-//                            x.IgnoreObsoleteProperties();
-//                            x.SwaggerDoc("v1", new Info { Title = "USTIC Data API", Version = "v1" });
-//                            x.OperationFilter<SwaggerOptionalFilter>();
+                            x.DescribeAllEnumsAsStrings();
+                            x.IncludeXmlComments($"{Path.Combine(ApplicationEnvironment.ApplicationBasePath, nameof(IdentityApi))}.xml");
+                            x.IgnoreObsoleteActions();
+                            x.IgnoreObsoleteProperties();
+                            x.SwaggerDoc("v1", new Info { Title = "IdentityAPI", Version = "v1" });
+                            x.OperationFilter<SwaggerOptionalFilter>();
                         });
         }
 
@@ -130,17 +139,17 @@ namespace IdentityApi
                    })
                .UseResponseCompression()
                .UseStaticFiles()
-//               .UseSwagger(x => x.RouteTemplate = "docs/{documentName}/swagger.json")
-//               .UseSwaggerUI(
-//                   x =>
-//                   {
-//                       x.RoutePrefix = "docs";
-//                       x.DocumentTitle("Identity API Documentation");
-//                       x.InjectStylesheet("swagger-ui/swagger.css");
-//                       x.ShowJsonEditor();
-//                       x.ShowRequestHeaders();
-//                       x.SwaggerEndpoint("v1/swagger.json", "Identity API Documentation");
-//                   })
+               .UseSwagger(x => x.RouteTemplate = "docs/{documentName}/swagger.json")
+               .UseSwaggerUI(
+                   x =>
+                   {
+                       x.RoutePrefix = "docs";
+                       x.DocumentTitle("Identity API Documentation");
+                       x.InjectStylesheet("swagger-ui/swagger.css");
+                       x.ShowJsonEditor();
+                       x.ShowRequestHeaders();
+                       x.SwaggerEndpoint("v1/swagger.json", "Identity API Documentation");
+                   })
                .UseMvc();
         }
     }
