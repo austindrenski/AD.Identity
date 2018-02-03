@@ -1,25 +1,65 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 
 namespace IdentityApi
 {
-    public class Program
+    /// <summary>
+    /// 
+    /// </summary>
+    [PublicAPI]
+    public sealed class Program
     {
-        public static void Main(string[] args)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="args">
+        /// 
+        /// </param>
+        /// <exception cref="ArgumentNullException" />
+        public static void Main([NotNull] [ItemNotNull] string[] args)
         {
+            if (args is null)
+            {
+                throw new ArgumentNullException(nameof(args));
+            }
+
             BuildWebHost(args).Run();
         }
 
-        public static IWebHost BuildWebHost(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>()
-                .Build();
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="args">
+        /// 
+        /// </param>
+        /// <returns>
+        /// 
+        /// </returns>
+        /// <exception cref="ArgumentNullException" />
+        [NotNull]
+        private static IWebHost BuildWebHost([NotNull] [ItemNotNull] string[] args)
+        {
+            if (args is null)
+            {
+                throw new ArgumentNullException(nameof(args));
+            }
+
+            IConfigurationRoot configuration =
+                new ConfigurationBuilder()
+                    .AddCommandLine(args)
+                    .Build();
+
+            return
+                WebHost.CreateDefaultBuilder(args)
+                       .UseHttpSys()
+                       .UseConfiguration(configuration)
+                       .UseContentRoot(Directory.GetCurrentDirectory())
+                       .UseStartup<Startup>()
+                       .Build();
+        }
     }
 }

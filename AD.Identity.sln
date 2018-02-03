@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AD.Identity", "AD.Identity\AD.Identity.csproj", "{F5316F47-6E3E-40FC-BD97-34067097B6CD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityApi", "identityapi\IdentityApi.csproj", "{96121D12-C9C5-49CF-BB8B-FA00B239FC25}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,17 @@ Global
 		{F5316F47-6E3E-40FC-BD97-34067097B6CD}.Release|x64.Build.0 = Release|x64
 		{F5316F47-6E3E-40FC-BD97-34067097B6CD}.Release|x86.ActiveCfg = Release|x86
 		{F5316F47-6E3E-40FC-BD97-34067097B6CD}.Release|x86.Build.0 = Release|x86
+		{96121D12-C9C5-49CF-BB8B-FA00B239FC25}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{96121D12-C9C5-49CF-BB8B-FA00B239FC25}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{96121D12-C9C5-49CF-BB8B-FA00B239FC25}.Debug|x64.ActiveCfg = Debug|x64
+		{96121D12-C9C5-49CF-BB8B-FA00B239FC25}.Debug|x64.Build.0 = Debug|x64
+		{96121D12-C9C5-49CF-BB8B-FA00B239FC25}.Debug|x86.ActiveCfg = Debug|x86
+		{96121D12-C9C5-49CF-BB8B-FA00B239FC25}.Debug|x86.Build.0 = Debug|x86
+		{96121D12-C9C5-49CF-BB8B-FA00B239FC25}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{96121D12-C9C5-49CF-BB8B-FA00B239FC25}.Release|Any CPU.Build.0 = Release|Any CPU
+		{96121D12-C9C5-49CF-BB8B-FA00B239FC25}.Release|x64.ActiveCfg = Release|x64
+		{96121D12-C9C5-49CF-BB8B-FA00B239FC25}.Release|x64.Build.0 = Release|x64
+		{96121D12-C9C5-49CF-BB8B-FA00B239FC25}.Release|x86.ActiveCfg = Release|x86
+		{96121D12-C9C5-49CF-BB8B-FA00B239FC25}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 EndGlobal

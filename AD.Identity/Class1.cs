@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace AD.Identity
+﻿namespace AD.Identity
 {
     public class Class1
     {

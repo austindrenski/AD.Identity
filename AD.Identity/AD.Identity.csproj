@@ -1,24 +1,41 @@
-<Project Sdk="Microsoft.NET.Sdk">
-
-    <PropertyGroup>
-        <TargetFramework>netstandard2.0</TargetFramework>
-        <LangVersion>latest</LangVersion>
-        <AssemblyName>AD.Identity</AssemblyName>
-        <RootNamespace>AD.Identity</RootNamespace>
-    </PropertyGroup>
-
-    <PropertyGroup>
-        <Authors>Austin Drenski</Authors>
-        <Company>Austin Drenski</Company>
-        <Copyright>Copyright © 2018 Austin Drenski</Copyright>
-        <Description>Microservice authentication middleware.</Description>
-        <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-        <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-        <PackageReleaseNotes>Updated to target .NET Standard 2.0</PackageReleaseNotes>
-        <Version>0.0.1.0</Version>
-    </PropertyGroup>
-
-    <ItemGroup>
-        <PackageReference Include="JetBrains.Annotations" Version="11.1.0"/>
-    </ItemGroup>
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <AssemblyName>AD.Identity</AssemblyName>
+    <RootNamespace>AD.Identity</RootNamespace>
+  </PropertyGroup>
+  <PropertyGroup>
+    <Authors>Austin Drenski</Authors>
+    <Company>Austin Drenski</Company>
+    <Copyright>Copyright © 2018 Austin Drenski</Copyright>
+    <Description>Microservice authentication middleware.</Description>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <PackageReleaseNotes>Updated to target .NET Standard 2.0</PackageReleaseNotes>
+    <Version>0.0.1.0</Version>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="AD.IO" Version="1.3.0" />
+    <PackageReference Include="AD.Xml" Version="1.3.0" />
+    <PackageReference Include="JetBrains.Annotations" Version="11.1.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="1.1.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.AspNetCore.Mvc.Abstractions, Version=2.0.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60">
+      <HintPath>..\..\..\..\Users\adren\.nuget\packages\microsoft.aspnetcore.mvc.abstractions\2.0.1\lib\netstandard2.0\Microsoft.AspNetCore.Mvc.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.Mvc.Core, Version=2.0.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60">
+      <HintPath>..\..\..\..\Users\adren\.nuget\packages\microsoft.aspnetcore.mvc.core\2.0.1\lib\netstandard2.0\Microsoft.AspNetCore.Mvc.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.Mvc.Razor, Version=2.0.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60">
+      <HintPath>..\..\..\..\Users\adren\.nuget\packages\microsoft.aspnetcore.mvc.razor\2.0.1\lib\netstandard2.0\Microsoft.AspNetCore.Mvc.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.Mvc.ViewFeatures, Version=2.0.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60">
+      <HintPath>..\..\..\..\Users\adren\.nuget\packages\microsoft.aspnetcore.mvc.viewfeatures\2.0.1\lib\netstandard2.0\Microsoft.AspNetCore.Mvc.ViewFeatures.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Primitives, Version=2.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60">
+      <HintPath>..\..\..\..\Users\adren\.nuget\packages\microsoft.extensions.primitives\2.0.0\lib\netstandard2.0\Microsoft.Extensions.Primitives.dll</HintPath>
+    </Reference>
+  </ItemGroup>
 </Project>
