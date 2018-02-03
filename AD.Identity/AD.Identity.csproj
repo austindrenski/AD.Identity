@@ -1,7 +1,24 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <LangVersion>latest</LangVersion>
+        <AssemblyName>AD.Identity</AssemblyName>
+        <RootNamespace>AD.Identity</RootNamespace>
+    </PropertyGroup>
 
+    <PropertyGroup>
+        <Authors>Austin Drenski</Authors>
+        <Company>Austin Drenski</Company>
+        <Copyright>Copyright © 2018 Austin Drenski</Copyright>
+        <Description>Microservice authentication middleware.</Description>
+        <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+        <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+        <PackageReleaseNotes>Updated to target .NET Standard 2.0</PackageReleaseNotes>
+        <Version>0.0.1.0</Version>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="JetBrains.Annotations" Version="11.1.0"/>
+    </ItemGroup>
 </Project>
