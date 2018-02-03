@@ -92,7 +92,7 @@ namespace IdentityApi
                     .AddMvc(
                         x =>
                         {
-                            x.Conventions.Add(new KebabControllerModelConvention());
+                            x.Conventions.Add(new KebabControllerModelConvention(nameof(IdentityApi)));
                             x.ModelMetadataDetailsProviders.Add(new KebabBindingMetadataProvider());
                             x.RespectBrowserAcceptHeader = true;
                         })
