@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.DotNet.PlatformAbstractions;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
@@ -74,8 +75,10 @@ namespace IdentityApi
                 throw new ArgumentNullException(nameof(services));
             }
 
+            services.AddEntityFrameworkNpgsql()
+                    .AddDbContext<IdentityContext>(x => x.UseNpgsql(Configuration.GetConnectionString("survey_db")));
+
             services.AddTransient<IEmailSender, EmailSender>()
-                    .AddScoped<IdentityContext>()
                     .AddIdentity<ApplicationUser, IdentityRole>()
                     .AddEntityFrameworkStores<IdentityContext>()
                     .AddDefaultTokenProviders();
@@ -92,9 +95,9 @@ namespace IdentityApi
                         {
                             x.Cookie.HttpOnly = true;
                             x.Cookie.Expiration = TimeSpan.FromDays(90);
-                            x.LoginPath = "/login";
-                            x.LogoutPath = "/logout";
-                            x.AccessDeniedPath = "/access-denied";
+                            x.LoginPath = "/account/login";
+                            x.LogoutPath = "/account/logout";
+                            x.AccessDeniedPath = "/account/access-denied";
                             x.SlidingExpiration = true;
                         });
 

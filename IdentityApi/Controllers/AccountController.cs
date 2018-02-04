@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.Extensions.Logging;
 using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
@@ -112,14 +113,9 @@ namespace IdentityApi.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login([NotNull] LoginViewModel model, [NotNull] string returnUrl)
+        public async Task<IActionResult> Login([NotNull] LoginViewModel model, [CanBeNull] string returnUrl)
         {
             if (model is null)
-            {
-                throw new ArgumentNullException(nameof(model));
-            }
-
-            if (returnUrl is null)
             {
                 throw new ArgumentNullException(nameof(model));
             }
@@ -129,7 +125,7 @@ namespace IdentityApi.Controllers
                 return View(model);
             }
 
-            ViewData["return-url"] = returnUrl;
+            ViewData["return-url"] = returnUrl ?? "/";
 
             SignInResult result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberLogin, true);
 
