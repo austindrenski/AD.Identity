@@ -1,12 +1,16 @@
 ﻿using System;
 using System.IO;
 using System.IO.Compression;
+using AD.Identity;
 using AD.Identity.Conventions;
 using AD.Identity.Extensions;
+using AD.Identity.Models;
+using IdentityApi.Services;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.DotNet.PlatformAbstractions;
@@ -70,7 +74,29 @@ namespace IdentityApi
                 throw new ArgumentNullException(nameof(services));
             }
 
-            //.AddScoped<IIdentityContext, IdentityContext>(_ => new IdentityContext(Configuration[$"ConnectionStrings:{EnvironmentName}:identity_db"]))
+            services.AddTransient<IEmailSender, EmailSender>()
+                    .AddScoped<IdentityContext>()
+                    .AddIdentity<ApplicationUser, IdentityRole>()
+                    .AddEntityFrameworkStores<IdentityContext>()
+                    .AddDefaultTokenProviders();
+
+            services.Configure<IdentityOptions>(
+                        x =>
+                        {
+                            x.Password.RequiredLength = 8;
+                            x.Password.RequiredUniqueChars = 4;
+                            x.User.RequireUniqueEmail = true;
+                        })
+                    .ConfigureApplicationCookie(
+                        x =>
+                        {
+                            x.Cookie.HttpOnly = true;
+                            x.Cookie.Expiration = TimeSpan.FromDays(90);
+                            x.LoginPath = "/login";
+                            x.LogoutPath = "/logout";
+                            x.AccessDeniedPath = "/access-denied";
+                            x.SlidingExpiration = true;
+                        });
 
             services.AddApiVersioning(
                         x =>
@@ -89,6 +115,16 @@ namespace IdentityApi
                             x.Cookie.HttpOnly = true;
                             x.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
                         })
+                    .AddSwaggerGen(
+                        x =>
+                        {
+                            x.DescribeAllEnumsAsStrings();
+                            x.IncludeXmlComments($"{Path.Combine(ApplicationEnvironment.ApplicationBasePath, nameof(IdentityApi))}.xml");
+                            x.IgnoreObsoleteActions();
+                            x.IgnoreObsoleteProperties();
+                            x.SwaggerDoc("v1", new Info { Title = "IdentityAPI", Version = "v1" });
+                            x.OperationFilter<SwaggerOptionalFilter>();
+                        })
                     .AddMvc(
                         x =>
                         {
@@ -101,17 +137,6 @@ namespace IdentityApi
                         {
                             x.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Serialize;
                             x.SerializerSettings.PreserveReferencesHandling = PreserveReferencesHandling.Objects;
-                        })
-                    .Services
-                    .AddSwaggerGen(
-                        x =>
-                        {
-                            x.DescribeAllEnumsAsStrings();
-                            x.IncludeXmlComments($"{Path.Combine(ApplicationEnvironment.ApplicationBasePath, nameof(IdentityApi))}.xml");
-                            x.IgnoreObsoleteActions();
-                            x.IgnoreObsoleteProperties();
-                            x.SwaggerDoc("v1", new Info { Title = "IdentityAPI", Version = "v1" });
-                            x.OperationFilter<SwaggerOptionalFilter>();
                         });
         }
 
@@ -139,6 +164,7 @@ namespace IdentityApi
                    })
                .UseResponseCompression()
                .UseStaticFiles()
+               .UseAuthentication()
                .UseSwagger(x => x.RouteTemplate = "docs/{documentName}/swagger.json")
                .UseSwaggerUI(
                    x =>

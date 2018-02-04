@@ -15,6 +15,19 @@ namespace IdentityApi.Controllers
         /// <returns>
         /// 
         /// </returns>
+        [NotNull]
+        [HttpGet]
+        public IActionResult Index()
+        {
+            return View();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns>
+        /// 
+        /// </returns>
         [HttpGet]
         [NotNull]
         public IActionResult Authenticate()
