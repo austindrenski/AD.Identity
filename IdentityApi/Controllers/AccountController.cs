@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.Extensions.Logging;
 using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
@@ -21,8 +20,8 @@ namespace IdentityApi.Controllers
     [Authorize]
     public sealed class AccountController : Controller
     {
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly UserManager<User> _userManager;
+        private readonly SignInManager<User> _signInManager;
         private readonly IEmailSender _emailSender;
         private readonly ILogger _logger;
 
@@ -42,8 +41,8 @@ namespace IdentityApi.Controllers
         /// 
         /// </param>
         public AccountController(
-            [NotNull] UserManager<ApplicationUser> userManager,
-            [NotNull] SignInManager<ApplicationUser> signInManager,
+            [NotNull] UserManager<User> userManager,
+            [NotNull] SignInManager<User> signInManager,
             [NotNull] IEmailSender emailSender,
             [NotNull] ILogger<AccountController> logger)
         {
@@ -73,9 +72,6 @@ namespace IdentityApi.Controllers
             _logger = logger;
         }
 
-//        [TempData]
-//        public string ErrorMessage { get; set; }
-//
         /// <summary>
         /// 
         /// </summary>
@@ -88,21 +84,18 @@ namespace IdentityApi.Controllers
         [NotNull]
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> Login([NotNull] string returnUrl)
+        public async Task<IActionResult> Login([NotNull] [FromQuery(Name = "return-url")]
+                                               string returnUrl)
         {
             await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
 
-            ViewData["return-url"] = returnUrl;
-            return View();
+            return View(new LoginViewModel { ReturnUrl = returnUrl });
         }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="model">
-        /// 
-        /// </param>
-        /// <param name="returnUrl">
         /// 
         /// </param>
         /// <returns>
@@ -113,7 +106,7 @@ namespace IdentityApi.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login([NotNull] LoginViewModel model, [CanBeNull] string returnUrl)
+        public async Task<IActionResult> Login([NotNull] LoginViewModel model)
         {
             if (model is null)
             {
@@ -125,14 +118,12 @@ namespace IdentityApi.Controllers
                 return View(model);
             }
 
-            ViewData["return-url"] = returnUrl ?? "/";
-
             SignInResult result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberLogin, true);
 
             if (result.Succeeded)
             {
                 _logger.LogInformation("User logged in.");
-                return RedirectToLocal(returnUrl);
+                return Redirect(model.ReturnUrl);
             }
 
             if (result.IsLockedOut)
@@ -176,19 +167,16 @@ namespace IdentityApi.Controllers
         [NotNull]
         [HttpGet]
         [AllowAnonymous]
-        public IActionResult Register([NotNull] string returnUrl)
+        public IActionResult Register([NotNull] [FromQuery(Name = "return-url")]
+                                      string returnUrl)
         {
-            ViewData["return-url"] = returnUrl;
-            return View();
+            return View(new RegisterViewModel { ReturnUrl = returnUrl });
         }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="model">
-        /// 
-        /// </param>
-        /// <param name="returnUrl">
         /// 
         /// </param>
         /// <returns>
@@ -199,23 +187,26 @@ namespace IdentityApi.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register([NotNull] RegisterViewModel model, [NotNull] string returnUrl)
+        public async Task<IActionResult> Register([NotNull] RegisterViewModel model)
         {
             if (model is null)
             {
                 throw new ArgumentNullException(nameof(model));
             }
 
-            if (returnUrl is null)
-            {
-                throw new ArgumentNullException(nameof(model));
-            }
-
-            ViewData["return-url"] = returnUrl;
             if (ModelState.IsValid)
             {
-                ApplicationUser user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                User user =
+                    new User
+                    {
+                        UserName = model.Email,
+                        NormalizedUserName = model.Email,
+                        Email = model.Email,
+                        NormalizedEmail = model.Email
+                    };
+
                 IdentityResult result = await _userManager.CreateAsync(user, model.Password);
+
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
@@ -231,10 +222,10 @@ namespace IdentityApi.Controllers
                             $"<a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>Click to confirm the account.</a>");
 
                     await _signInManager.SignInAsync(user, false);
-                    
+
                     _logger.LogInformation("User created a new account with password.");
-                    
-                    return RedirectToLocal(returnUrl);
+
+                    return Redirect(model.ReturnUrl);
                 }
 
                 foreach (IdentityError error in result.Errors)
@@ -364,14 +355,15 @@ namespace IdentityApi.Controllers
         [NotNull]
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> ConfirmEmail([CanBeNull] string userId, [CanBeNull] string code)
+        public async Task<IActionResult> ConfirmEmail([CanBeNull] [FromRoute(Name = "user-id")]
+                                                      string userId, [CanBeNull] string code)
         {
             if (userId is null || code is null)
             {
                 return RedirectToAction(nameof(IdentityController.Index), "Identity");
             }
 
-            ApplicationUser user = await _userManager.FindByIdAsync(userId);
+            User user = await _userManager.FindByIdAsync(userId);
 
             if (user is null)
             {
@@ -489,32 +481,6 @@ namespace IdentityApi.Controllers
         public IActionResult AccessDenied()
         {
             return View();
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="returnUrl">
-        /// 
-        /// </param>
-        /// <returns>
-        /// 
-        /// </returns>
-        /// <exception cref="ArgumentNullException" />
-        [NotNull]
-        private IActionResult RedirectToLocal([NotNull] string returnUrl)
-        {
-            if (returnUrl is null)
-            {
-                throw new ArgumentNullException(nameof(returnUrl));
-            }
-
-            if (Url.IsLocalUrl(returnUrl))
-            {
-                return Redirect(returnUrl);
-            }
-
-            return RedirectToAction(nameof(IdentityController.Authenticate), "Identity");
         }
     }
 }

@@ -13,6 +13,12 @@ namespace IdentityApi.Models
         /// 
         /// </summary>
         [Required]
+        public string ReturnUrl { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        [Required]
         [EmailAddress]
         public string Email { get; set; }
 
@@ -26,7 +32,7 @@ namespace IdentityApi.Models
         /// <summary>
         ///  
         /// </summary>
-        [Display(Name = "Remember login?")]
+        [Required]
         public bool RememberLogin { get; set; }
     }
 }

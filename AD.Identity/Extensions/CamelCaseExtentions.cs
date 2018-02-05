@@ -14,7 +14,7 @@ namespace AD.Identity.Extensions
         /// The regular expression to match camel case text.
         /// </summary>
         [NotNull] [ProvidesContext] private static readonly Regex CamelCaseRegex = new Regex("(?<!^)([A-Z][a-z]|(?<=[a-z])[A-Z])", RegexOptions.Compiled);
-       
+
         /// <summary>
         /// Applies the regular expression to change camel case style to kebab style.
         /// </summary>
@@ -36,7 +36,7 @@ namespace AD.Identity.Extensions
 
             return CamelCaseRegex.Replace(value, "-$1").ToLower();
         }
-        
+
         /// <summary>
         /// Applies the regular expression to change camel case style to path style.
         /// </summary>
@@ -58,7 +58,7 @@ namespace AD.Identity.Extensions
 
             return CamelCaseRegex.Replace(value, "/$1").ToLower();
         }
-        
+
         /// <summary>
         /// Applies the regular expression to change camel case style to space style.
         /// </summary>
@@ -101,6 +101,28 @@ namespace AD.Identity.Extensions
             }
 
             return value.Replace("-", null).ToLower();
+        }
+
+        /// <summary>
+        /// Applies the regular expression to change camel case to snake case.
+        /// </summary>
+        /// <param name="value">
+        /// The value to modify.
+        /// </param>
+        /// <returns>
+        /// The value in camel case style.
+        /// </returns>
+        /// <exception cref="ArgumentNullException" />
+        [Pure]
+        [NotNull]
+        public static string CamelCaseToSnakeCase([NotNull] this string value)
+        {
+            if (value is null)
+            {
+                throw new ArgumentNullException(nameof(value));
+            }
+
+            return CamelCaseRegex.Replace(value, "_$1").ToLower();
         }
     }
 }

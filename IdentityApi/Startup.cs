@@ -76,10 +76,9 @@ namespace IdentityApi
             }
 
             services.AddEntityFrameworkNpgsql()
-                    .AddDbContext<IdentityContext>(x => x.UseNpgsql(Configuration.GetConnectionString("survey_db")));
-
-            services.AddTransient<IEmailSender, EmailSender>()
-                    .AddIdentity<ApplicationUser, IdentityRole>()
+                    .AddDbContext<IdentityContext>(x => x.UseNpgsql(Configuration.GetConnectionString("identity_db")))
+                    .AddTransient<IEmailSender, EmailSender>()
+                    .AddIdentity<User, Role>()
                     .AddEntityFrameworkStores<IdentityContext>()
                     .AddDefaultTokenProviders();
 
