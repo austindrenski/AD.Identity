@@ -1,11 +1,17 @@
-
+﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AD.Identity", "AD.Identity\AD.Identity.csproj", "{F5316F47-6E3E-40FC-BD97-34067097B6CD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AD.Identity", "src/AD.Identity\AD.Identity.csproj", "{F5316F47-6E3E-40FC-BD97-34067097B6CD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityApi", "identityapi\IdentityApi.csproj", "{96121D12-C9C5-49CF-BB8B-FA00B239FC25}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityApi", "src/IdentityApi\IdentityApi.csproj", "{96121D12-C9C5-49CF-BB8B-FA00B239FC25}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution items", "Solution items", "{3783B779-2C2A-45F1-95CA-AB3E27B95A45}"
+ProjectSection(SolutionItems) = preProject
+	README.md = README.md
+	LICENSE = LICENSE
+EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
