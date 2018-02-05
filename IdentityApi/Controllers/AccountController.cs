@@ -84,8 +84,7 @@ namespace IdentityApi.Controllers
         [NotNull]
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> Login([NotNull] [FromQuery(Name = "return-url")]
-                                               string returnUrl)
+        public async Task<IActionResult> Login([NotNull] [FromQuery(Name = "return-url")] string returnUrl)
         {
             await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
 
@@ -167,8 +166,7 @@ namespace IdentityApi.Controllers
         [NotNull]
         [HttpGet]
         [AllowAnonymous]
-        public IActionResult Register([NotNull] [FromQuery(Name = "return-url")]
-                                      string returnUrl)
+        public IActionResult Register([NotNull] [FromQuery(Name = "return-url")] string returnUrl)
         {
             return View(new RegisterViewModel { ReturnUrl = returnUrl });
         }
@@ -194,48 +192,44 @@ namespace IdentityApi.Controllers
                 throw new ArgumentNullException(nameof(model));
             }
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                User user =
-                    new User
-                    {
-                        UserName = model.Email,
-                        NormalizedUserName = model.Email,
-                        Email = model.Email,
-                        NormalizedEmail = model.Email
-                    };
+                return View(model);
+            }
 
-                IdentityResult result = await _userManager.CreateAsync(user, model.Password);
-
-                if (result.Succeeded)
+            User user =
+                new User
                 {
-                    _logger.LogInformation("User created a new account with password.");
+                    UserName = model.Email,
+                    Email = model.Email,
+                };
 
-                    string code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            IdentityResult result = await _userManager.CreateAsync(user, model.Password);
 
-                    string callbackUrl = Url.Action(nameof(ConfirmEmail), "Account", new { user.Id, code }, Request.Scheme);
-
-                    await
-                        _emailSender.SendEmailAsync(
-                            model.Email,
-                            "Confirm account email",
-                            $"<a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>Click to confirm the account.</a>");
-
-                    await _signInManager.SignInAsync(user, false);
-
-                    _logger.LogInformation("User created a new account with password.");
-
-                    return Redirect(model.ReturnUrl);
-                }
-
+            if (!result.Succeeded)
+            {
                 foreach (IdentityError error in result.Errors)
                 {
                     ModelState.AddModelError(error.Code, error.Description);
                 }
+
+                return View(model);
             }
 
-            // If we got this far, something failed, redisplay form
-            return View(model);
+            _logger.LogInformation("User created a new account with password.");
+
+            string code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+
+            string callbackUrl = Url.Action(nameof(ConfirmEmail), "Account", new { user.Id, code }, Request.Scheme);
+
+            await _emailSender.SendEmailAsync(
+                model.Email,
+                "Confirm account email",
+                $"<a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>Click to confirm the account.</a>");
+
+            await _signInManager.SignInAsync(user, false);
+
+            return Redirect(model.ReturnUrl);
         }
 
         /// <summary>
@@ -355,8 +349,7 @@ namespace IdentityApi.Controllers
         [NotNull]
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> ConfirmEmail([CanBeNull] [FromRoute(Name = "user-id")]
-                                                      string userId, [CanBeNull] string code)
+        public async Task<IActionResult> ConfirmEmail([CanBeNull] [FromRoute(Name = "user-id")] string userId, [CanBeNull] string code)
         {
             if (userId is null || code is null)
             {
@@ -389,86 +382,149 @@ namespace IdentityApi.Controllers
             return View();
         }
 
-//        [HttpPost]
-//        [AllowAnonymous]
-//        [ValidateAntiForgeryToken]
-//        public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
-//        {
-//            if (ModelState.IsValid)
-//            {
-//                var user = await _userManager.FindByEmailAsync(model.Email);
-//                if (user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
-//                {
-//                    // Don't reveal that the user does not exist or is not confirmed
-//                    return RedirectToAction(nameof(ForgotPasswordConfirmation));
-//                }
-//
-//                // For more information on how to enable account confirmation and password reset please
-//                // visit https://go.microsoft.com/fwlink/?LinkID=532713
-//                var code = await _userManager.GeneratePasswordResetTokenAsync(user);
-//                var callbackUrl = Url.ResetPasswordCallbackLink(user.Id, code, Request.Scheme);
-//                await _emailSender.SendEmailAsync(model.Email, "Reset Password",
-//                                                  $"Please reset your password by clicking here: <a href='{callbackUrl}'>link</a>");
-//                return RedirectToAction(nameof(ForgotPasswordConfirmation));
-//            }
-//
-//            // If we got this far, something failed, redisplay form
-//            return View(model);
-//        }
-//
-//        [HttpGet]
-//        [AllowAnonymous]
-//        public IActionResult ForgotPasswordConfirmation()
-//        {
-//            return View();
-//        }
-//
-//        [HttpGet]
-//        [AllowAnonymous]
-//        public IActionResult ResetPassword(string code = null)
-//        {
-//            if (code == null)
-//            {
-//                throw new ApplicationException("A code must be supplied for password reset.");
-//            }
-//
-//            var model = new ResetPasswordViewModel { Code = code };
-//            return View(model);
-//        }
-//
-//        [HttpPost]
-//        [AllowAnonymous]
-//        [ValidateAntiForgeryToken]
-//        public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
-//        {
-//            if (!ModelState.IsValid)
-//            {
-//                return View(model);
-//            }
-//
-//            var user = await _userManager.FindByEmailAsync(model.Email);
-//            if (user == null)
-//            {
-//                // Don't reveal that the user does not exist
-//                return RedirectToAction(nameof(ResetPasswordConfirmation));
-//            }
-//
-//            var result = await _userManager.ResetPasswordAsync(user, model.Code, model.Password);
-//            if (result.Succeeded)
-//            {
-//                return RedirectToAction(nameof(ResetPasswordConfirmation));
-//            }
-//
-//            AddErrors(result);
-//            return View();
-//        }
-//
-//        [HttpGet]
-//        [AllowAnonymous]
-//        public IActionResult ResetPasswordConfirmation()
-//        {
-//            return View();
-//        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="model">
+        /// 
+        /// </param>
+        /// <returns>
+        /// 
+        /// </returns>
+        [NotNull]
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            User user = await _userManager.FindByEmailAsync(model.Email);
+
+            if (user is null || !await _userManager.IsEmailConfirmedAsync(user))
+            {
+                return RedirectToAction(nameof(ForgotPasswordConfirmation));
+            }
+
+            string code = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+            string callbackUrl = Url.Action(nameof(ResetPassword), "Account", new { user.Id, code }, Request.Scheme);
+
+            await _emailSender.SendEmailAsync(
+                model.Email,
+                "Reset Password",
+                $"Please reset your password by clicking here: <a href='{callbackUrl}'>link</a>");
+
+            return RedirectToAction(nameof(ForgotPasswordConfirmation));
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns>
+        /// 
+        /// </returns>
+        [NotNull]
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult ForgotPasswordConfirmation()
+        {
+            return View();
+        }
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="code">
+        ///
+        /// </param>
+        /// <returns>
+        ///
+        /// </returns>
+        /// <exception cref="ArgumentNullException" />
+        [NotNull]
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult ResetPassword([NotNull] string code)
+        {
+            if (code is null)
+            {
+                throw new ArgumentNullException("A code must be supplied for password reset.");
+            }
+
+            ResetPasswordViewModel model =
+                new ResetPasswordViewModel
+                {
+                    Code = code
+                };
+
+            return View(model);
+        }
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="model">
+        ///
+        /// </param>
+        /// <returns>
+        ///
+        /// </returns>
+        /// <exception cref="ArgumentNullException" />
+        [NotNull]
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
+        {
+            if (model is null)
+            {
+                throw new ArgumentNullException(nameof(model));
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            User user = await _userManager.FindByEmailAsync(model.Email);
+
+            if (user is null)
+            {
+                return RedirectToAction(nameof(ResetPasswordConfirmation));
+            }
+
+            IdentityResult result = await _userManager.ResetPasswordAsync(user, model.Code, model.Password);
+
+            if (result.Succeeded)
+            {
+                return RedirectToAction(nameof(ResetPasswordConfirmation));
+            }
+
+            foreach (IdentityError error in result.Errors)
+            {
+                ModelState.AddModelError(error.Code, error.Description);
+            }
+
+            return View();
+        }
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <returns>
+        ///
+        /// </returns>
+        [NotNull]
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult ResetPasswordConfirmation()
+        {
+            return View();
+        }
 
         /// <summary>
         /// 
