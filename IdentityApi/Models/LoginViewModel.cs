@@ -13,12 +13,6 @@ namespace IdentityApi.Models
         /// 
         /// </summary>
         [Required]
-        public string ReturnUrl { get; set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        [Required]
         [EmailAddress]
         public string Email { get; set; }
 
@@ -30,7 +24,7 @@ namespace IdentityApi.Models
         public string Password { get; set; }
 
         /// <summary>
-        ///  
+        ///
         /// </summary>
         [Required]
         public bool RememberLogin { get; set; }

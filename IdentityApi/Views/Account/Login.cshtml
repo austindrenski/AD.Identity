@@ -2,7 +2,7 @@
 @using IdentityApi.Models
 @model LoginViewModel
 @{
-    string returnUrl = Model?.ReturnUrl ?? "/";
+    string returnUrl = (string) ViewData["return-url"] ?? "/api";
 }
 
 <h2>Log in</h2>
@@ -30,7 +30,6 @@
                     </div>
 
                     <div class="form-group">
-
                         <label name="password" class="input-group-addon">Password</label>
                         <input name="password" class="form-control"/>
                         <span asp-validation-for="Password" class="text-danger"></span>
@@ -44,10 +43,10 @@
 
             <div class="form-group">
                 <p>
-                    <a asp-controller="Account" asp-action="ForgotPassword">Forgot your password?</a>
+                    <a asp-controller="Account" asp-action="ForgotPassword" asp-route-return-url="@returnUrl">Forgot your password?</a>
                 </p>
                 <p>
-                    <a asp-controller="Account" asp-action="Register">Register as a new user?</a>
+                    <a asp-controller="Account" asp-action="Register" asp-route-return-url="@returnUrl">Register as a new user?</a>
                 </p>
             </div>
 

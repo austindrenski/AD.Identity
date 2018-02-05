@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Linq;
 using System.Text.RegularExpressions;
 using AD.Identity.Extensions;
 using JetBrains.Annotations;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace AD.Identity.Conventions
 {
@@ -80,6 +83,26 @@ namespace AD.Identity.Conventions
                         action.ActionName.Equals(Index, StringComparison.OrdinalIgnoreCase)
                             ? string.Empty
                             : action.ActionName.CamelCaseToPathCase();
+                }
+
+                foreach (ParameterModel parameter in action.Parameters)
+                {
+                    if (!parameter.ParameterInfo.ParameterType.IsPrimitive && parameter.ParameterInfo.ParameterType != typeof(string))
+                    {
+                        continue;
+                    }
+
+                    if (parameter.BindingInfo is null)
+                    {
+                        parameter.BindingInfo = new BindingInfo();
+                    }
+
+                    parameter.BindingInfo.BinderModelName = parameter.ParameterName.CamelCaseToKebabCase();
+
+                    parameter.BindingInfo.BindingSource =
+                        parameter.Action.Attributes.OfType<HttpPostAttribute>().Any()
+                            ? BindingSource.Form
+                            : BindingSource.Query;
                 }
             }
         }

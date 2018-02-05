@@ -84,18 +84,26 @@ namespace IdentityApi.Controllers
         [NotNull]
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> Login([NotNull] [FromQuery(Name = "return-url")] string returnUrl)
+        public async Task<IActionResult> Login([NotNull] [FromQuery]string returnUrl)
         {
+            if (returnUrl is null)
+            {
+                throw new ArgumentNullException(nameof(returnUrl));
+            }
+
             await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
 
-            return View(new LoginViewModel { ReturnUrl = returnUrl });
+            ViewData["return-url"] = returnUrl;
+
+            return View();
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="model">
-        /// 
+        /// </param>
+        /// <param name="returnUrl">
+        ///
         /// </param>
         /// <returns>
         /// 
@@ -105,12 +113,19 @@ namespace IdentityApi.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login([NotNull] LoginViewModel model)
+        public async Task<IActionResult> Login([NotNull] LoginViewModel model, [NotNull] string returnUrl)
         {
             if (model is null)
             {
                 throw new ArgumentNullException(nameof(model));
             }
+
+            if (returnUrl is null)
+            {
+                throw new ArgumentNullException(nameof(returnUrl));
+            }
+
+            ViewData["return-url"] = returnUrl;
 
             if (!ModelState.IsValid)
             {
@@ -122,7 +137,7 @@ namespace IdentityApi.Controllers
             if (result.Succeeded)
             {
                 _logger.LogInformation("User logged in.");
-                return Redirect(model.ReturnUrl);
+                return Redirect(returnUrl);
             }
 
             if (result.IsLockedOut)
@@ -163,19 +178,28 @@ namespace IdentityApi.Controllers
         /// <returns>
         /// 
         /// </returns>
+        /// <exception cref="ArgumentNullException" />
         [NotNull]
         [HttpGet]
         [AllowAnonymous]
-        public IActionResult Register([NotNull] [FromQuery(Name = "return-url")] string returnUrl)
+        public IActionResult Register([NotNull] string returnUrl)
         {
-            return View(new RegisterViewModel { ReturnUrl = returnUrl });
+            if (returnUrl is null)
+            {
+                throw new ArgumentNullException(nameof(returnUrl));
+            }
+
+            ViewData["return-url"] = returnUrl;
+
+            return View();
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="model">
-        /// 
+        /// </param>
+        /// <param name="returnUrl">
+        ///
         /// </param>
         /// <returns>
         /// 
@@ -185,12 +209,19 @@ namespace IdentityApi.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register([NotNull] RegisterViewModel model)
+        public async Task<IActionResult> Register([NotNull] RegisterViewModel model, [NotNull] string returnUrl)
         {
             if (model is null)
             {
                 throw new ArgumentNullException(nameof(model));
             }
+
+            if (returnUrl is null)
+            {
+                throw new ArgumentNullException(nameof(returnUrl));
+            }
+
+            ViewData["return-url"] = returnUrl;
 
             if (!ModelState.IsValid)
             {
@@ -229,7 +260,7 @@ namespace IdentityApi.Controllers
 
             await _signInManager.SignInAsync(user, false);
 
-            return Redirect(model.ReturnUrl);
+            return Redirect(returnUrl);
         }
 
         /// <summary>
@@ -349,7 +380,7 @@ namespace IdentityApi.Controllers
         [NotNull]
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> ConfirmEmail([CanBeNull] [FromRoute(Name = "user-id")] string userId, [CanBeNull] string code)
+        public async Task<IActionResult> ConfirmEmail([CanBeNull] string userId, [CanBeNull] string code)
         {
             if (userId is null || code is null)
             {

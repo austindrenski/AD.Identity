@@ -13,12 +13,6 @@ namespace IdentityApi.Models
         /// 
         /// </summary>
         [Required]
-        public string ReturnUrl { get; set; }
-        
-        /// <summary>
-        /// 
-        /// </summary>
-        [Required]
         [EmailAddress]
         public string Email { get; set; }
 

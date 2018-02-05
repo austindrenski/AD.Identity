@@ -17,6 +17,7 @@ namespace AD.Identity.Conventions
             {
                 throw new ArgumentNullException(nameof(context));
             }
+
             if (context.BindingMetadata.BinderModelName is null)
             {
                 context.BindingMetadata.BinderModelName = context.Key.Name?.CamelCaseToKebabCase();
@@ -30,6 +31,7 @@ namespace AD.Identity.Conventions
             {
                 throw new ArgumentNullException(nameof(context));
             }
+
             if (context.DisplayMetadata.DisplayName is null)
             {
                 context.DisplayMetadata.DisplayName = () => context.Key.Name?.CamelCaseToKebabCase();

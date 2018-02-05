@@ -2,7 +2,7 @@
 @using IdentityApi.Models
 @model RegisterViewModel
 @{
-    string returnUrl = Model?.ReturnUrl ?? "/";
+    string returnUrl = (string) ViewData["return-url"] ?? "/api";
 }
 
 <h2>Register</h2>
