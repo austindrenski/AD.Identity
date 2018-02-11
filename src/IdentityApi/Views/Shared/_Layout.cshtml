@@ -1,64 +1,94 @@
 ﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
-
-<!DOCTYPE html>
-<html>
+@model object
+<!doctype html>
+<html lang="en">
     <head>
         <meta charset="utf-8"/>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-        <title>@ViewData["Title"] - Identity API</title>
-        <link rel="stylesheet"
-              href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/css/bootstrap.min.css"
-              asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
-              asp-fallback-test-class="sr-only"
-              asp-fallback-test-property="position"
-              asp-fallback-test-value="absolute"/>
+
+        <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1"/>
+
+        <title>@ViewData["Title"]</title>
+
+        <link rel="icon" type="image/x-icon" href="~/assets/favicon.ico" sizes="32x32">
+
+        <environment include="Development">
+            <link rel="stylesheet"
+                  type="text/css"
+                  href="~/css/site.css"
+                  asp-append-version="true"/>
+
+            <link rel="stylesheet"
+                  type="text/css"
+                  href="~/css/bootstrap-4.0.0.css"
+                  asp-append-version="true"/>
+        </environment>
+
+        <environment include="Production">
+            <link rel="stylesheet"
+                  type="text/css"
+                  href="~/min/site.min.css"
+                  asp-append-version="true"/>
+
+            <link rel="stylesheet"
+                  href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+                  integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+                  crossorigin="anonymous"
+                  asp-append-version="true"/>
+
+            <script src="~/min/site.min.js"
+                    asp-append-version="true">
+            </script>
+        </environment>
     </head>
     <body>
-        <nav class="navbar navbar-inverse navbar-fixed-top">
-            <div class="container">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a asp-controller="Identity" asp-action="Authenticate" class="navbar-brand">Identity API</a>
-                </div>
-                <div class="navbar-collapse collapse">
-                    <ul class="nav navbar-nav">
-                        <li>
-                            <a asp-controller="Identity" asp-action="Authenticate">Authenticate</a>
-                        </li>
-                        <li>
-                            <a asp-controller="Account" asp-action="Register">Register</a>
-                        </li>
-                        <li>
-                            <a asp-controller="Account" asp-action="Login">Login</a>
-                        </li>
-                    </ul>
-                    @await Html.PartialAsync("_LoginPartial")
-                </div>
-            </div>
-        </nav>
-        <div class="container body-content">
+        <header>
+            @await Html.PartialAsync("Navigation")
+        </header>
+        <div id="container" class="container">
             @RenderBody()
-            <hr/>
         </div>
+        <footer>
+            <hr/>
+        </footer>
+        <environment include="Development">
+            <script src="~/js/jquery-3.2.1.js"
+                    asp-append-version="true">
+            </script>
 
-        <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"
-                asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
-                asp-fallback-test="window.jQuery"
-                crossorigin="anonymous"
-                integrity="sha384-K+ctZQ+LL8q6tP7I94W+qzQsfRV2a+AfHIi9k8z8l9ggpc8X+Ytst4yBo/hH+8Fk">
-        </script>
-        <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/bootstrap.min.js"
-                asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
-                asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"
-                crossorigin="anonymous"
-                integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa">
-        </script>
+            <script src="~/js/popper-1.12.9.js"
+                    asp-append-version="true">
+            </script>
 
-        @RenderSection("Scripts", false)
+            <script src="~/js/bootstrap-4.0.0.js"
+                    asp-append-version="true">
+            </script>
+
+            <script src="~/js/site.js"
+                    asp-append-version="true">
+            </script>
+        </environment>
+        <environment include="Production">
+            <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+                    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+                    crossorigin="anonymous"
+                    asp-append-version="true">
+            </script>
+
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+                    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+                    crossorigin="anonymous"
+                    asp-append-version="true">
+            </script>
+
+            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+                    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+                    crossorigin="anonymous"
+                    asp-append-version="true">
+            </script>
+
+            <script src="~/min/site.min.js"
+                    asp-append-version="true">
+            </script>
+        </environment>
     </body>
 </html>

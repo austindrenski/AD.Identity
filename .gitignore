@@ -1,0 +1,7 @@
+﻿bin/
+obj/
+packages/
+.idea/**/*
+wwwroot/
+!IdentityApi/wwwroot/css/site.css
+!IdentityApi/wwwroot/js/site.js
