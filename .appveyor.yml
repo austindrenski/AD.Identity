@@ -1,0 +1,20 @@
+image:
+  - Visual Studio 2017
+
+platform:
+  - Any CPU
+
+dotnet_csproj:
+  patch: true
+  file: '**\*.csproj'
+  version: '{version}'
+  package_version: '{version}'
+  assembly_version: '{version}'
+  file_version: '{version}'
+  informational_version: '{version}'
+
+install:
+  - pwsh: mkdir src/IdentityApi/wwwroot/min
+
+build_script:
+  - pwsh: dotnet build --configuration Release
