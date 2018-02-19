@@ -7,6 +7,7 @@ using AD.Identity.Extensions;
 using AD.Identity.Models;
 using IdentityApi.Services;
 using JetBrains.Annotations;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -78,27 +79,30 @@ namespace IdentityApi
             services.AddEntityFrameworkNpgsql()
                     .AddDbContext<IdentityContext>(x => x.UseNpgsql(Configuration.GetConnectionString("identity_db")))
                     .AddTransient<IEmailSender, EmailSender>()
-                    .AddIdentity<User, Role>()
-                    .AddEntityFrameworkStores<IdentityContext>()
-                    .AddDefaultTokenProviders();
-
-            services.Configure<IdentityOptions>(
+                    .AddIdentity<User, Role>(
                         x =>
                         {
                             x.Password.RequiredLength = 8;
                             x.Password.RequiredUniqueChars = 4;
                             x.User.RequireUniqueEmail = true;
                         })
-                    .ConfigureApplicationCookie(
-                        x =>
-                        {
-                            x.Cookie.HttpOnly = true;
-                            x.Cookie.Expiration = TimeSpan.FromDays(90);
-                            x.LoginPath = "/account/login";
-                            x.LogoutPath = "/account/logout";
-                            x.AccessDeniedPath = "/account/access-denied";
-                            x.SlidingExpiration = true;
-                        });
+                    .AddEntityFrameworkStores<IdentityContext>()
+                    .AddDefaultTokenProviders();
+
+//            services.AddAuthentication(HttpSysDefaults.AuthenticationScheme);
+
+            services.ConfigureApplicationCookie(
+                x =>
+                {
+                    x.ExpireTimeSpan = TimeSpan.FromDays(90);
+                    x.Cookie.HttpOnly = true;
+                    x.Cookie.Expiration = TimeSpan.FromDays(90);
+                    x.LoginPath = "/account/login";
+                    x.LogoutPath = "/account/logout";
+                    x.AccessDeniedPath = "/account/access-denied";
+                    x.SlidingExpiration = true;
+                    x.ReturnUrlParameter = "return-url";
+                });
 
             services.AddApiVersioning(
                         x =>

@@ -1,4 +1,5 @@
 ﻿using JetBrains.Annotations;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace IdentityApi.Controllers
@@ -30,6 +31,7 @@ namespace IdentityApi.Controllers
         /// </returns>
         [HttpGet]
         [NotNull]
+        [Authorize]
         public IActionResult Authenticate()
         {
             return View();

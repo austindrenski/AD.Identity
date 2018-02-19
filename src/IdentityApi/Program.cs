@@ -3,6 +3,7 @@ using System.IO;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Server.HttpSys;
 using Microsoft.Extensions.Configuration;
 
 namespace IdentityApi
@@ -59,6 +60,12 @@ namespace IdentityApi
                        .UseConfiguration(configuration)
                        .UseContentRoot(Directory.GetCurrentDirectory())
                        .UseStartup<Startup>()
+//                       .UseHttpSys(
+//                           x =>
+//                           {
+//                               x.Authentication.Schemes = AuthenticationSchemes.NTLM;
+//                               x.Authentication.AllowAnonymous = true;
+//                           })
                        .Build();
         }
     }
