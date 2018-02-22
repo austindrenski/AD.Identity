@@ -1,9 +1,9 @@
 ﻿using System;
 using System.IO;
 using System.IO.Compression;
+using AD.ApiExtensions.Conventions;
+using AD.ApiExtensions.Filters;
 using AD.Identity;
-using AD.Identity.Conventions;
-using AD.Identity.Extensions;
 using AD.Identity.Models;
 using IdentityApi.Services;
 using JetBrains.Annotations;
@@ -20,11 +20,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using Swashbuckle.AspNetCore.Swagger;
+using KebabControllerModelConvention = AD.Identity.Conventions.KebabControllerModelConvention;
 
 namespace IdentityApi
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     [PublicAPI]
     public sealed class Startup
@@ -43,7 +44,7 @@ namespace IdentityApi
         ///
         /// </summary>
         /// <param name="environment">
-        /// 
+        ///
         /// </param>
         /// <exception cref="ArgumentNullException" />
         public Startup([NotNull] IHostingEnvironment environment)
@@ -67,7 +68,7 @@ namespace IdentityApi
         /// This method gets called by the runtime. Use this method to add services to the container.
         /// </summary>
         /// <param name="services">
-        /// 
+        ///
         /// </param>
         public void ConfigureServices([NotNull] IServiceCollection services)
         {
@@ -129,7 +130,7 @@ namespace IdentityApi
                             x.IgnoreObsoleteActions();
                             x.IgnoreObsoleteProperties();
                             x.SwaggerDoc("v1", new Info { Title = "IdentityAPI", Version = "v1" });
-                            x.OperationFilter<SwaggerOptionalFilter>();
+                            x.OperationFilter<SwaggerOptionalOperationFilter>();
                         })
                     .AddMvc(
                         x =>
@@ -150,7 +151,7 @@ namespace IdentityApi
         /// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         /// </summary>
         /// <param name="app">
-        /// 
+        ///
         /// </param>
         public void Configure([NotNull] IApplicationBuilder app)
         {

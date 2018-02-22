@@ -1,5 +1,5 @@
 ﻿using System;
-using AD.Identity.Extensions;
+using AD.ApiExtensions;
 using AD.Identity.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Identity;
 namespace AD.Identity
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     [PublicAPI]
     public sealed class IdentityContext : IdentityDbContext<User, Role, Guid>
@@ -18,7 +18,7 @@ namespace AD.Identity
         ///
         /// </summary>
         /// <param name="options">
-        /// 
+        ///
         /// </param>
         /// <exception cref="ArgumentNullException" />
         public IdentityContext([NotNull] DbContextOptions<IdentityContext> options) : base(options)
@@ -43,7 +43,7 @@ namespace AD.Identity
 
             builder.Entity<User>().ToTable("users");
             builder.Entity<Role>().ToTable("roles");
-            
+
             builder.Entity<IdentityRoleClaim<Guid>>().ToTable("role_claims");
             builder.Entity<IdentityUserClaim<Guid>>().ToTable("user_claims");
             builder.Entity<IdentityUserLogin<Guid>>().ToTable("user_logins");
