@@ -1,5 +1,5 @@
 ﻿using System;
-using AD.ApiExtensions;
+using AD.ApiExtensions.Conventions;
 using AD.Identity.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -8,19 +8,21 @@ using Microsoft.AspNetCore.Identity;
 
 namespace AD.Identity
 {
+    /// <inheritdoc />
     /// <summary>
     ///
     /// </summary>
     [PublicAPI]
     public sealed class IdentityContext : IdentityDbContext<User, Role, Guid>
     {
+        /// <inheritdoc />
         /// <summary>
         ///
         /// </summary>
         /// <param name="options">
         ///
         /// </param>
-        /// <exception cref="ArgumentNullException" />
+        /// <exception cref="T:System.ArgumentNullException" />
         public IdentityContext([NotNull] DbContextOptions<IdentityContext> options) : base(options)
         {
             if (options is null)

@@ -7,7 +7,6 @@ using AD.Identity;
 using AD.Identity.Models;
 using IdentityApi.Services;
 using JetBrains.Annotations;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -20,7 +19,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using Swashbuckle.AspNetCore.Swagger;
-using KebabControllerModelConvention = AD.Identity.Conventions.KebabControllerModelConvention;
 
 namespace IdentityApi
 {

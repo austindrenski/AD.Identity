@@ -4,17 +4,18 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace IdentityApi.Controllers
 {
+    /// <inheritdoc />
     /// <summary>
-    /// 
+    ///
     /// </summary>
     [PublicAPI]
     public sealed class IdentityController : Controller
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <returns>
-        /// 
+        ///
         /// </returns>
         [NotNull]
         [HttpGet]
@@ -24,10 +25,10 @@ namespace IdentityApi.Controllers
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <returns>
-        /// 
+        ///
         /// </returns>
         [HttpGet]
         [NotNull]

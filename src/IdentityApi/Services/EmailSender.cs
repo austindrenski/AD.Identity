@@ -3,14 +3,16 @@ using JetBrains.Annotations;
 
 namespace IdentityApi.Services
 {
+    /// <inheritdoc />
     /// <summary>
-    /// Represents a way to send emails for account creation and recovery. 
+    /// Represents a way to send emails for account creation and recovery.
     /// </summary>
     [PublicAPI]
     public sealed class EmailSender : IEmailSender
     {
+        /// <inheritdoc />
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="email"></param>
         /// <param name="subject"></param>

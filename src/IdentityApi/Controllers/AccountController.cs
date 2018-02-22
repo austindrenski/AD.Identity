@@ -14,8 +14,9 @@ using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
 namespace IdentityApi.Controllers
 {
+    /// <inheritdoc />
     /// <summary>
-    /// 
+    ///
     /// </summary>
     [Authorize]
     public sealed class AccountController : Controller
@@ -26,19 +27,19 @@ namespace IdentityApi.Controllers
         private readonly ILogger _logger;
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="userManager">
-        /// 
+        ///
         /// </param>
         /// <param name="signInManager">
-        /// 
+        ///
         /// </param>
         /// <param name="emailSender">
-        /// 
+        ///
         /// </param>
         /// <param name="logger">
-        /// 
+        ///
         /// </param>
         public AccountController(
             [NotNull] UserManager<User> userManager,
@@ -73,13 +74,13 @@ namespace IdentityApi.Controllers
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="returnUrl">
-        /// 
+        ///
         /// </param>
         /// <returns>
-        /// 
+        ///
         /// </returns>
         [NotNull]
         [HttpGet]
@@ -106,7 +107,7 @@ namespace IdentityApi.Controllers
         ///
         /// </param>
         /// <returns>
-        /// 
+        ///
         /// </returns>
         /// <exception cref="ArgumentNullException" />
         [NotNull]
@@ -158,7 +159,7 @@ namespace IdentityApi.Controllers
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <returns></returns>
         [NotNull]
@@ -170,13 +171,13 @@ namespace IdentityApi.Controllers
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="returnUrl">
-        /// 
+        ///
         /// </param>
         /// <returns>
-        /// 
+        ///
         /// </returns>
         /// <exception cref="ArgumentNullException" />
         [NotNull]
@@ -202,7 +203,7 @@ namespace IdentityApi.Controllers
         ///
         /// </param>
         /// <returns>
-        /// 
+        ///
         /// </returns>
         /// <exception cref="ArgumentNullException" />
         [NotNull]
@@ -264,10 +265,10 @@ namespace IdentityApi.Controllers
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <returns>
-        /// 
+        ///
         /// </returns>
         [NotNull]
         [HttpPost]
@@ -365,16 +366,16 @@ namespace IdentityApi.Controllers
 //        }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="userId">
-        /// 
+        ///
         /// </param>
         /// <param name="code">
-        /// 
+        ///
         /// </param>
         /// <returns>
-        /// 
+        ///
         /// </returns>
         /// <exception cref="ApplicationException" />
         [NotNull]
@@ -400,10 +401,10 @@ namespace IdentityApi.Controllers
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <returns>
-        /// 
+        ///
         /// </returns>
         [NotNull]
         [HttpGet]
@@ -414,13 +415,13 @@ namespace IdentityApi.Controllers
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="model">
-        /// 
+        ///
         /// </param>
         /// <returns>
-        /// 
+        ///
         /// </returns>
         [NotNull]
         [HttpPost]
@@ -453,10 +454,10 @@ namespace IdentityApi.Controllers
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <returns>
-        /// 
+        ///
         /// </returns>
         [NotNull]
         [HttpGet]
@@ -558,10 +559,10 @@ namespace IdentityApi.Controllers
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <returns>
-        /// 
+        ///
         /// </returns>
         [NotNull]
         [HttpGet]

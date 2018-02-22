@@ -3,7 +3,6 @@ using System.IO;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Server.HttpSys;
 using Microsoft.Extensions.Configuration;
 
 namespace IdentityApi

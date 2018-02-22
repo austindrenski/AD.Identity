@@ -4,6 +4,10 @@ using Microsoft.AspNetCore.Identity;
 
 namespace AD.Identity.Models
 {
+    /// <inheritdoc />
+    /// <summary>
+    /// Inherits <see cref="IdentityRole{TKey}"/> with <see cref="Guid"/>.
+    /// </summary>
     [PublicAPI]
     public sealed class Role : IdentityRole<Guid>
     {
@@ -19,6 +23,7 @@ namespace AD.Identity.Models
         /// <inheritdoc />
         public override string ConcurrencyStamp { get; set; }
 
+        /// <inheritdoc />
         /// <summary>Returns the name of the role.</summary>
         /// <returns>The name of the role.</returns>
         public override string ToString()

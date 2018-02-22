@@ -4,8 +4,9 @@ using Microsoft.AspNetCore.Identity;
 
 namespace AD.Identity.Models
 {
+    /// <inheritdoc />
     /// <summary>
-    /// Represents profile data for application users. 
+    /// Represents profile data for application users.
     /// </summary>
     [PublicAPI]
     public sealed class User : IdentityUser<Guid>
